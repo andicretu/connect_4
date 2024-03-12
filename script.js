@@ -1,10 +1,13 @@
 
 let matrix = [];
+let maxRows = 6;
+let maxColumns = 7;
+let win = 3;
 function initiateRowAndPlayers() {
-    for (let i = 0; i < 7; ++i) {
+    for (let i = 0; i < maxColumns; ++i) {
         min[i] = 0;
         matrix[i] = [];
-        for (let j = 0; j < 6; ++j) {
+        for (let j = 0; j < maxRows; ++j) {
             matrix[i][j] = document.getElementById(`c${i}r${j}`);
         }
     }
@@ -72,7 +75,7 @@ function checkVerticalsPlayer1() {
         } else {
             consecutiveV = 0;
         }
-        if (consecutiveV === 3) {
+        if (consecutiveV === win) {
             winMessage(player1);
             break; 
         }
@@ -89,7 +92,7 @@ function checkVerticalsPlayer2() {
         } else {
             consecutiveV = 0;
         }
-        if (consecutiveV === 3) {
+        if (consecutiveV === win) {
             winMessage(player2);
             break;
         }
@@ -99,17 +102,14 @@ function checkVerticalsPlayer2() {
 function checkHorizontalsPlayer1() {
     let length = player1Positions.length;
     player1Positions.sort(comparePairsHorizontal);
-    player1Msg.textContent = player1Positions;
     let consecutiveH = 0;
     for (let i = 0; i < length - 1; ++i) {
         if (player1Positions[i][1] === player1Positions[i + 1][1] && player1Positions[i][0] - player1Positions[i + 1][0] == -1) {
             ++consecutiveH;
-            csmessageH.textContent = "Horizontal 1" + consecutiveH;
         } else {
             consecutiveH = 0;
-            csmessageH.textContent = "Horizontal 1" + consecutiveH;
         }
-        if (consecutiveH === 3) {
+        if (consecutiveH === win) {
             winMessage(player1);
             break; 
         }
@@ -119,7 +119,6 @@ function checkHorizontalsPlayer1() {
 function checkHorizontalsPlayer2() {
     let length = player2Positions.length;
     player2Positions.sort(comparePairsHorizontal);
-    player2Msg.textContent = player2Positions;
     let consecutiveH = 0;  
     for (let i = 0; i < length - 1; ++i) {
         if (player2Positions[i][1] === player2Positions[i + 1][1] && player2Positions[i][0] - player2Positions[i + 1][0] === -1) {
@@ -127,71 +126,69 @@ function checkHorizontalsPlayer2() {
         } else {
             consecutiveH = 0;
         }
-        if (consecutiveH === 3) {
+        if (consecutiveH === win) {
             winMessage(player2);
             break;
         }
     }
 }
 
-function checkDiagonalsPlayer1() {//nu reseteaza corect, da "win" si daca este intercalata cealalta culoare!!!
+function checkDiagonalsPlayer1() {
     let length = player1Positions.length;
     player1Positions.sort(comparePairsVertical);
-    let consecutiveD = 0; 
     for (let i = 0; i < length; ++i) {
-        consecutiveD = 0;
+        let consecutiveD = 0;
         for (let j = i + 1; j < length; ++j) {
-            if (
-                player1Positions[j][1] - player1Positions[i][1] === player1Positions[j][0] - player1Positions[i][0]
-                ) {
+            let d1 = player1Positions[j][1] - player1Positions[i][1];
+            let d0 = player1Positions[j][0] - player1Positions[i][0];
+            if (d1 === d0 && d1 === consecutiveD + 1) {
                 ++consecutiveD;
             }
         }
-        if (consecutiveD === 3) {
+        if (consecutiveD === win) {
             winMessage(player1);
             break; 
         }
+        consecutiveD = 0;
         for (let j = i + 1; j < length; ++j) {
-            consecutiveD = 0;
-            if (
-                player1Positions[j][1] - player1Positions[i][1] === -(player1Positions[j][0] - player1Positions[i][0])
-                ) {
+            let d1 = player1Positions[j][1] - player1Positions[i][1];
+            let d0 = player1Positions[j][0] - player1Positions[i][0];
+            if (d1 === -d0 && d0 === consecutiveD + 1) {
                 ++consecutiveD;
             }
         }
-        if (consecutiveD === 3) {
+        if (consecutiveD === win) {
             winMessage(player1);
             break; 
         }
     }
 }
 
-function checkDiagonalsPlayer2() {//nu reseteaza corect, da "win" si daca este intercalata cealalta culoare!!!
+function checkDiagonalsPlayer2() {
     let length = player2Positions.length;
     player1Positions.sort(comparePairsVertical);
-    let consecutiveD = 0; 
     for (let i = 0; i < length; ++i) {
-        consecutiveD = 0;
+        let consecutiveD = 0;
         for (let j = i + 1; j < length; ++j) {
-            if (
-                player2Positions[j][1] - player2Positions[i][1] === player2Positions[j][0] - player2Positions[i][0]
-                ) {
-                    ++consecutiveD;
+            let d1 = player2Positions[j][1] - player2Positions[i][1];
+            let d0 = player2Positions[j][0] - player2Positions[i][0]
+            if (d1 === d0 && d1 === consecutiveD + 1) {
+                ++consecutiveD;
             }
         }
-        if (consecutiveD === 3) {
+        if (consecutiveD === win) {
             winMessage(player2);
             break;
         }
+        consecutiveD = 0;
         for (let j = i + 1; j < length; ++j) {
-            consecutiveD = 0;
-            if (
-                player2Positions[j][1] - player2Positions[i][1] === -(player2Positions[j][0] - player2Positions[i][0])
-                ) { 
-                    ++consecutiveD;
+            d1 = player2Positions[j][1] - player2Positions[i][1];
+            d0 = player2Positions[j][0] - player2Positions[i][0];
+            if (d1 === -d0 && d1 === consecutiveD + 1) { 
+                ++consecutiveD;
             }
         }
-        if (consecutiveD === 3) {
+        if (consecutiveD === win) {
             winMessage(player2);
             break;
         }
@@ -205,7 +202,7 @@ function winMessage(player) {
 
 let columns = [];
 document.addEventListener(`DOMContentLoaded`, function() {
-    for (let i = 0; i < 7; ++i) {
+    for (let i = 0; i < maxColumns; ++i) {
         columns[i] = document.getElementById(`c${i}`);
         columns[i].addEventListener('click', function(event) {
             markCell(i);
