@@ -44,3 +44,7 @@ h1, h2 {
     place-items: center;
     background-color: #ffd700;
 }
+
+#winMessage {
+    font-size: 28px;
+}
